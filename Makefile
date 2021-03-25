@@ -18,8 +18,12 @@ release-via-docker: package-via-docker
 	docker tag ${REPO}:latest ${REPO}:${PKG_TAG}
 	docker rm ui-build-${PKG_TAG} 2>> /dev/null || true
 	docker create --name ui-build-${PKG_TAG} ${REPO}:${PKG_TAG}
-	docker cp ui-build-${PKG_TAG}:/app/web $(shell pwd)/ui-web
-	zip -r ui-web.zip ui-web
+	docker cp ui-build-${PKG_TAG}:/app/web $(shell pwd)/ui-web-amd64
+	docker cp ui-build-${PKG_TAG}:/app/web-darwin $(shell pwd)/ui-web-darwin
+	docker cp ui-build-${PKG_TAG}:/app/web-windows $(shell pwd)/ui-web-windows
+	zip -r ui-web-amd64.zip ui-web-amd64
+	zip -r ui-web-darwin.zip ui-web-darwin
+	zip -r ui-web-windows.zip ui-web-windows
 	docker rm  ui-build-${PKG_TAG}
 
 latest-push: package-via-docker
